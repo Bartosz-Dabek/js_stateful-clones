@@ -8,26 +8,30 @@
  */
 function transformStateWithClones(state, actions) {
   const result = [];
-
-  let currentState = { ...state }; // kopiujemy początek
+  let currentState = { ...state };
 
   for (const action of actions) {
-
-    // robimy NOWĄ kopię przed zmianą
     let newState = { ...currentState };
 
-    if (action.type === 'addProperties') {
-      Object.assign(newState, action.extraData);
-    }
+    switch (action.type) {
 
-    if (action.type === 'removeProperties') {
-      for (const key of action.keysToRemove) {
-        delete newState[key];
-      }
-    }
+      case 'addProperties':
+        Object.assign(newState, action.extraData);
+        break;
 
-    if (action.type === 'clear') {
-      newState = {};
+      case 'removeProperties':
+        for (const key of action.keysToRemove) {
+          delete newState[key];
+        }
+        break;
+
+      case 'clear':
+        newState = {};
+        break;
+
+      default:
+        // ignorujemy nieznane akcje
+        break;
     }
 
     result.push(newState);
